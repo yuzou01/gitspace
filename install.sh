@@ -124,5 +124,5 @@ EOF
 
 clone_repo
 create_mainfest_file
-install
+# install
 exit 0
