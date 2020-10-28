@@ -60,7 +60,7 @@ EOF
 clone_repo(){
     echo "进行初始化。。。"
 	rm -rf gitspace
-    git clone https://github.com/yuzou01/gitspace
+    git clone git://github.com/yuzou01/gitspace
     cd gitspace
     git submodule update --init --recursive
     cd vr2-cf/v2ray
