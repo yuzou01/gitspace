@@ -27,7 +27,7 @@ create_mainfest_file(){
       memory: ${IBM_MEM_SIZE}M
 EOF
 
-    cat >  ${SH_PATH}/gitspace/vr2-cf/v2go/config.json  << EOF
+    cat >  ${SH_PATH}/gitspace/vr2-cf/vgo/config.json  << EOF
     {
         "inbounds": [
             {
