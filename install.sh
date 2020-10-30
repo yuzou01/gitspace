@@ -4,11 +4,14 @@ cd ${SH_PATH}
 
 create_mainfest_file(){
     echo "进行配置。。。"
-    read -p "请输入你的应用名称：" IBM_APP_NAME
+    read -p "请输入你的应用名称(默认cddcbid)：" IBM_APP_NAME
+	 if [ -z "${IBM_APP_NAME}" ];then
+    IBM_APP_NAME="cddcbid"
+	fi
     echo "应用名称：${IBM_APP_NAME}"
     read -p "请输入你的应用内存大小(默认256)：" IBM_MEM_SIZE
     if [ -z "${IBM_MEM_SIZE}" ];then
-    IBM_MEM_SIZE=256
+    IBM_MEM_SIZE=64
     fi
     echo "内存大小：${IBM_MEM_SIZE}"
     UUID=$(cat /proc/sys/kernel/random/uuid)
@@ -24,12 +27,12 @@ create_mainfest_file(){
       memory: ${IBM_MEM_SIZE}M
 EOF
 
-    cat >  ${SH_PATH}/gitspace/vr2-cf/v2ray/config.json  << EOF
+    cat >  ${SH_PATH}/gitspace/vr2-cf/v2go/config.json  << EOF
     {
         "inbounds": [
             {
                 "port": 8080,
-                "protocol": "vmess",
+                "protocol": "vmcddcbid",
                 "settings": {
                     "clients": [
                         {
@@ -63,30 +66,7 @@ clone_repo(){
     git clone git://github.com/yuzou01/gitspace
     cd gitspace
     git submodule update --init --recursive
-    cd vr2-cf/v2ray
-    # Upgrade V2Ray to the latest version
-    rm v2ray v2ctl
-    
-    # Script from https://github.com/v2fly/fhs-install-v2ray/blob/master/install-release.sh
-    # Get V2Ray release version number
-    TMP_FILE="$(mktemp)"
-    if ! curl -s -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
-        rm "$TMP_FILE"
-        echo 'error: 获取最新V2Ray版本号失败。请重试'
-        exit 1
-    fi
-    RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
-    rm "$TMP_FILE"
-    echo "当前最新V2Ray版本为$RELEASE_LATEST"
-    # Download latest release
-    DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/v4.20.5/v2ray-linux-64.zip"
-    if ! curl -L -H 'Cache-Control: no-cache' -o "latest-v2ray.zip" "$DOWNLOAD_LINK"; then
-        echo 'error: 下载V2Ray失败，请重试'
-        return 1
-    fi
-    unzip latest-v2ray.zip v2ray v2ctl geoip.dat geosite.dat
-    rm latest-v2ray.zip
-    
+    cd vr2-cf/vgo
     chmod 0755 ./*
     cd ${SH_PATH}/gitspace/vr2-cf
     echo "初始化完成。"
@@ -124,5 +104,5 @@ EOF
 
 clone_repo
 create_mainfest_file
-# install
+install
 exit 0
